@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/index.js" type="module"></script>
+    <title>Calculator</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="output-container">
+            <p id="output"></p>
+        </div>
+        <div id="input-container-first">
+            <div class="input-cell-round">
+                <legend>Round:</legend>
+                <input type="radio" value="round-float" id="round-float" name="round" checked>
+                <label for="round-float">F</label>
+                <input type="radio" value="round-off" id="round-off" name="round">
+                <label for="round-off">5/4</label>
+                <input type="radio" value="round-cut" id="round-cut" name="round">
+                <label for="round-cut">CUT (2)</label>
+            </div>
+            <button type="button" data-value="backspace" data-type="task" class="input-cell input-cell-half" title="Backspace">◀</button>
+        </div>
+        <div id="input-container-second">
+            <button type="button" data-value="changeSign" data-type="task" class="input-cell input-cell-half" title="Change sign">±</button>
+            <button type="button" data-value="memoryClear" data-type="task" class="input-cell input-cell-half" title="Clear memory">MC</button>
+            <button type="button" data-value="memoryRecall" data-type="task" class="input-cell input-cell-half" title="Recall memory">MR</button>
+            <button type="button" data-value="memorySubtract" data-type="task" class="input-cell input-cell-half" title="Subtract from memory">M-</button>
+            <button type="button" data-value="memoryAdd" data-type="task" class="input-cell input-cell-half" title="Add to memory">M+</button>
+            <button type="button" data-value="percentage" data-type="operation" class="input-cell" title="Percentage">%</button>
+            <button type="button" data-value="7" data-type="input" class="input-cell">7</button>
+            <button type="button" data-value="8" data-type="input" class="input-cell">8</button>
+            <button type="button" data-value="9" data-type="input" class="input-cell">9</button>
+            <button type="button" data-value="divide" data-type="operation" class="input-cell" title="Divide">÷</button>
+            <button type="button" data-value="root" data-type="task" class="input-cell" title="Square root">√</button>
+            <button type="button" data-value="4" data-type="input" class="input-cell">4</button>
+            <button type="button" data-value="5" data-type="input" class="input-cell">5</button>
+            <button type="button" data-value="6" data-type="input" class="input-cell">6</button>
+            <button type="button" data-value="multiply" data-type="operation" class="input-cell" title="Multiply">×</button>
+            <button type="button" data-value="clear" data-type="task" class="input-cell" title="Clear screen">C</button>
+            <button type="button" data-value="1" data-type="input" class="input-cell">1</button>
+            <button type="button" data-value="2" data-type="input" class="input-cell">2</button>
+            <button type="button" data-value="3" data-type="input" class="input-cell">3</button>
+            <button type="button" data-value="subtract" data-type="operation" class="input-cell" title="Subtract">-</button>
+            <button type="button" data-value="allClear" data-type="task" class="input-cell" title="Clear all">AC</button>
+            <button type="button" data-value="." data-type="input" class="input-cell" title="Decimal point">.</button>
+            <button type="button" data-value="0" data-type="input" class="input-cell">0</button>
+            <button type="button" data-value="equal" data-type="operation" class="input-cell" title="Equal">=</button>
+            <button type="button" data-value="add" data-type="operation" class="input-cell" title="Add">+</button>
+        </div>
+    </div>
+</body>
+</html>
