@@ -4,8 +4,10 @@ export default class Calculator {
 
         valueStr: "0",
         maxLength: 18,
+        roundValue: "round-float",
         received: false,
         outputElement: document.querySelector("#output"),
+        roundElement: document.querySelector('button[data-type="round"]'),
 
         getStr() {return this.valueStr},
         getNum() {return parseFloat(this.valueStr)},
@@ -61,7 +63,7 @@ export default class Calculator {
         },
         parse() {
 
-            const roundValue = document.querySelector("input[name='round']:checked").value;
+            const roundValue = this.roundValue;
             const inputStr = this.valueStr;
             const inputNum = this.getNum();
 
@@ -148,6 +150,26 @@ export default class Calculator {
             }
 
             Calculator.input.writeToScreen(true);
+
+        },
+        round() {
+
+            if (Calculator.input.roundValue === "round-float") {
+
+                Calculator.input.roundValue = "round-off";
+                Calculator.input.roundElement.textContent = "5/4"
+
+            } else if (Calculator.input.roundValue === "round-off") {
+
+                Calculator.input.roundValue = "round-cut";
+                Calculator.input.roundElement.textContent = "CUT"
+
+            } else {
+
+                Calculator.input.roundValue = "round-float";
+                Calculator.input.roundElement.textContent = "F"
+
+            }
 
         }
 
@@ -307,6 +329,10 @@ export default class Calculator {
 
             case "backspace":
                 this.tasks.backspace();
+                break;
+
+            case "round":
+                this.tasks.round();
                 break;
 
             case "memoryRecall":
