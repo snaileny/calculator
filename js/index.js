@@ -25,15 +25,12 @@ const eventHandler = function(event) {
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+const buttons = document.querySelectorAll("button");
+Calculator.input.writeToScreen();
 
-    const buttons = document.querySelectorAll("button");
-    Calculator.input.writeToScreen();
+buttons.forEach((button) => {
 
-    buttons.forEach((button) => {
-
-        button.addEventListener("click", eventHandler);
-
-    });
+    button.addEventListener("click", eventHandler);
 
 });
+
