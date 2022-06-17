@@ -14,12 +14,17 @@ export default class Calculator {
         set(input) {
 
             const inputStr = String(input);
-            this.valueStr = this.trimLength(inputStr);
+            this.valueStr = inputStr.slice(0, this.maxLength + 1);
                 
         },
         addTo(str) {
+
+            const filteredInput = this.valueStr
+                .split("")
+                .filter((el) => {if (el !== "-" && el !== ".") {return el;}})
+                .join("");
             
-            if (this.getNumbersFrom().length < this.maxLength || this.received === false) {
+            if (filteredInput.length < this.maxLength || this.received === false) {
 
                 if (str === "." && !this.valueStr.includes(".")) {
 
@@ -44,37 +49,18 @@ export default class Calculator {
             this.received = true;
 
         },
-        trimLength(input) {
-
-            return input.slice(0, this.maxLength + 1);
-
-        },
-        getNumbersFrom(input = this.valueStr) {
-
-            return input
-                .split("")
-                .filter((el) => {
-
-                    if (el !== "-" && el !== ".") {return el;}
-
-                })
-                .join("");
-
-        },
         parse() {
 
-            const roundValue = this.roundValue;
-            const inputStr = this.valueStr;
             const inputNum = this.getNum();
-
+            const inputStr = this.valueStr;
             const dotIndex = inputStr.indexOf(".");
             const slicedInput = inputStr.slice(0, dotIndex + 3);
 
-            if (roundValue === "round-off" && dotIndex !== -1) {
+            if (this.roundValue === "round-off" && dotIndex !== -1) {
                 
                 this.valueStr = inputNum.toFixed(2);
 
-            } else if (roundValue === "round-cut") {
+            } else if (this.roundValue === "round-cut") {
 
                 this.valueStr = slicedInput;
 
@@ -346,7 +332,7 @@ export default class Calculator {
             case "memoryAdd":
                 this.memory.add();
                 break;
-
+                
             case "memorySubtract":
                 this.memory.sub();
                 break;
