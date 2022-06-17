@@ -3,7 +3,7 @@ export default class Calculator {
     static input = {
 
         valueStr: "0",
-        maxLength: 18,
+        maxLength: 16,
         roundValue: "round-float",
         received: false,
         outputElement: document.querySelector("#output"),
@@ -11,15 +11,15 @@ export default class Calculator {
 
         getStr() {return this.valueStr},
         getNum() {return parseFloat(this.valueStr)},
-        set(input) {this.valueStr = String(input).slice(0, this.maxLength + 1)},
+        set(val) {this.valueStr = String(val).slice(0, this.maxLength)},
         addTo(str) {
 
-            const filteredInput = this.valueStr
+            const filteredValue = this.valueStr
                 .split("")
                 .filter((el) => {if (el !== "-" && el !== ".") {return el;}})
                 .join("");
             
-            if (filteredInput.length < this.maxLength || this.received === false) {
+            if (filteredValue.length < this.maxLength || this.received === false) {
 
                 if (str === "." && !this.valueStr.includes(".")) {
 
@@ -241,10 +241,10 @@ export default class Calculator {
                     this.register.setNumber(num);
 
                     const result = this.calculate();
-                    const status = this.register.status;
+                    const prevStatus = this.register.status;
                     this.register.reset();
                     this.register.setNumber(result);
-                    this.register.status = status;
+                    this.register.status = prevStatus;
 
                     this.input.set(result);
                     this.input.received = false;
