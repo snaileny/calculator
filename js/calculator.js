@@ -7,16 +7,11 @@ export default class Calculator {
         roundValue: "round-float",
         received: false,
         outputElement: document.querySelector("#output"),
-        roundElement: document.querySelector('button[data-type="round"]'),
+        roundElement: document.querySelector('button[data-value="round"]'),
 
         getStr() {return this.valueStr},
         getNum() {return parseFloat(this.valueStr)},
-        set(input) {
-
-            const inputStr = String(input);
-            this.valueStr = inputStr.slice(0, this.maxLength + 1);
-                
-        },
+        set(input) {this.valueStr = String(input).slice(0, this.maxLength + 1)},
         addTo(str) {
 
             const filteredInput = this.valueStr
@@ -51,18 +46,15 @@ export default class Calculator {
         },
         parse() {
 
-            const inputNum = this.getNum();
-            const inputStr = this.valueStr;
-            const dotIndex = inputStr.indexOf(".");
-            const slicedInput = inputStr.slice(0, dotIndex + 3);
+            const dotIndex = this.valueStr.indexOf(".");
 
             if (this.roundValue === "round-off" && dotIndex !== -1) {
                 
-                this.valueStr = inputNum.toFixed(2);
+                this.valueStr = this.getNum().toFixed(2);
 
             } else if (this.roundValue === "round-cut") {
 
-                this.valueStr = slicedInput;
+                this.valueStr = this.valueStr.slice(0, dotIndex + 3);
 
             }
 
@@ -110,7 +102,7 @@ export default class Calculator {
             Calculator.input.set("0");
             Calculator.input.received = false;
             Calculator.memory.clear();
-            Calculator.register.resetAll();
+            Calculator.register.reset();
             Calculator.input.writeToScreen();
 
         },
@@ -143,17 +135,17 @@ export default class Calculator {
             if (Calculator.input.roundValue === "round-float") {
 
                 Calculator.input.roundValue = "round-off";
-                Calculator.input.roundElement.textContent = "5/4"
+                Calculator.input.roundElement.textContent = "5/4";
 
             } else if (Calculator.input.roundValue === "round-off") {
 
                 Calculator.input.roundValue = "round-cut";
-                Calculator.input.roundElement.textContent = "CUT"
+                Calculator.input.roundElement.textContent = "CUT";
 
             } else {
 
                 Calculator.input.roundValue = "round-float";
-                Calculator.input.roundElement.textContent = "F"
+                Calculator.input.roundElement.textContent = "F";
 
             }
 
@@ -164,7 +156,7 @@ export default class Calculator {
     static memory = {
 
         value: 0,
-
+        
         recall() {
 
             Calculator.input.set(this.value);
@@ -173,7 +165,7 @@ export default class Calculator {
         },
         clear() {this.value = 0},
         add() {this.value += Calculator.input.getNum()},
-        sub() {this.value -= Calculator.input.getNum()}
+        subtract() {this.value -= Calculator.input.getNum()}
 
     }
 
@@ -210,16 +202,7 @@ export default class Calculator {
             }
 
         },
-        setStatus(operation) {this.status = operation;},
-        setResult(num) {this.result = num},
-        resetNum() {
-
-            this.state = 0;
-            this.x = 0;
-            this.y = 0;
-
-        },
-        resetAll() {
+        reset() {
 
             this.state = 0;
             this.status = "";
@@ -236,7 +219,7 @@ export default class Calculator {
 
             if (operation !== "equal") {
 
-                this.register.setStatus(operation);
+                this.register.status = operation;
 
                 const num = this.input.getNum()
                 this.register.setNumber(num);
@@ -250,7 +233,7 @@ export default class Calculator {
 
             if (operation !== "equal") {
 
-                this.register.setStatus(operation);
+                this.register.status = operation;
 
                 if (this.input.received === true) { 
 
@@ -258,8 +241,10 @@ export default class Calculator {
                     this.register.setNumber(num);
 
                     const result = this.calculate();
-                    this.register.resetNum();
+                    const status = this.register.status;
+                    this.register.reset();
                     this.register.setNumber(result);
+                    this.register.status = status;
 
                     this.input.set(result);
                     this.input.received = false;
@@ -269,19 +254,19 @@ export default class Calculator {
 
             } else if (operation === "equal") {
 
-                if (this.input.received === true || this.register.status === "mul" || this.register.status === "div") {
+                if (this.input.received === true || this.register.status === "multiply" || this.register.status === "divide") {
 
                     const num = this.input.getNum();
                     this.register.setNumber(num);
 
                     const result = this.calculate();
-                    this.register.resetAll();
+                    this.register.reset();
     
                     this.input.set(result);
                     this.input.received = false;
                     this.input.writeToScreen(true);
     
-                } 
+                }
 
             }
             
@@ -291,51 +276,13 @@ export default class Calculator {
 
     static executeTask(task) {
 
-        switch(task) {
+        if (task.includes("memory") === true) {
 
-            case "equal":
-                this.tasks.equal();
-                break;
+            this.memory[task.replace("memory", "").toLowerCase()]();
 
-            case "root":
-                this.tasks.root();
-                break;
+        } else {
 
-            case "changeSign":
-                this.tasks.changeSign();
-                break;
-
-            case "clear":
-                this.tasks.clear();
-                break;
-
-            case "allClear":
-                this.tasks.allClear();
-                break;
-
-            case "backspace":
-                this.tasks.backspace();
-                break;
-
-            case "round":
-                this.tasks.round();
-                break;
-
-            case "memoryRecall":
-                this.memory.recall();
-                break;
-
-            case "memoryClear":
-                this.memory.clear();
-                break;
-
-            case "memoryAdd":
-                this.memory.add();
-                break;
-                
-            case "memorySubtract":
-                this.memory.sub();
-                break;
+            this.tasks[task]();
 
         }
 
@@ -343,27 +290,7 @@ export default class Calculator {
 
     static calculate(x = this.register.x, y = this.register.y, operation = this.register.status) {
 
-        switch(operation) {
-
-            case "add":
-                return this.operations.add(x, y);
-            
-            case "subtract":
-                return this.operations.subtract(x, y);
-
-            case "multiply":
-                return this.operations.multiply(x, y);
-
-            case "divide":
-                return this.operations.divide(x, y);
-
-            case "percentage":
-                return this.operations.percentage(x, y);
-
-            default:
-                return 0;
-
-        }
+        return this.operations[operation](x, y);
 
     }
 
